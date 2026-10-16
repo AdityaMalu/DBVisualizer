@@ -1,0 +1,14 @@
+@media (max-width: 980px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .app .rail{display:block;position:fixed;top:0;bottom:0;left:0;height:auto;width:min(320px,86vw);z-index:30;transform:translateX(-100%);visibility:hidden;box-shadow:0 0 0 rgb(0 0 0 / 0)}
+  .app.rail-open .rail{transform:none;visibility:visible;box-shadow:4px 0 24px rgb(0 0 0 / .25)}
+  .app .rail-resize{display:none}
+  .app .rail-toggle{display:inline-flex}
+  .rail-backdrop:not([hidden]){display:block;position:fixed;inset:0;background:rgb(0 0 0 / .4);z-index:29}
+  .mobile-pick{display:block;margin-bottom:14px}
+  .mobile-pick select{width:100%;font:inherit;padding:8px;border-radius:7px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+  main{padding-inline:16px}
+  .work{grid-template-columns:minmax(0,1fr)}
+  .head h2{font-size:24px}
+}
+@media (prefers-reduced-motion: no-preference){ .row,.chip,.th,.ln{transition:background-color .25s} .rail{transition:transform .2s ease,visibility .2s,box-shadow .2s} }

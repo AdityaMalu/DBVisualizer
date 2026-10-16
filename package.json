@@ -1,0 +1,21 @@
+{
+  "name": "db-visualizer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Step-by-step visual walkthroughs of database concepts, with theory, simple-to-complex examples, interview tips, runnable SQL exercises and quizzes.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --watch",
+    "check": "node scripts/check-content.mjs",
+    "test:e2e": "playwright test",
+    "test": "npm run check && npm run build && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1",
+    "sql.js": "1.15.0"
+  }
+}

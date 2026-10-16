@@ -1,0 +1,24 @@
+/* Layout: topic rail grouped by part on the left, a debugger-style workspace (code | live state) with the step narration on top. */
+:root{
+  --bg:#eef2f5; --panel:#ffffff; --ink:#15202b; --muted:#5a6977; --line:#d8e0e7; --soft:#f4f7f9;
+  --accent:#0b6aa8; --accent-soft:#dcecf7;
+  --code-bg:#f7f9fb; --code-hl:#fff6d6;
+  --t0:#2463d6; --t1:#c26a05; --t2:#0a8a5f; --t3:#b02bb8; --t4:#5f6f82; --t5:#c0392b;
+  --run:#0a8a5f; --ready:#3d7fb8; --blocked:#c43c3c; --waiting:#b7790a; --timed:#c2560b; --new:#7b8794; --term:#9aa5b1;
+  --hot:#fff1bf; --hot-line:#e0b300; --bad:#fde3e1; --bad-line:#c43c3c; --ok:#dff5ea; --ok-line:#0a8a5f;
+  --f-display:"Bricolage Grotesque", "IBM Plex Sans", system-ui, sans-serif;
+  --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f151b; --panel:#161e26; --ink:#e3eaf0; --muted:#93a2b0; --line:#2a3642; --soft:#1b2530;
+  --accent:#5cb3ef; --accent-soft:#16334a; --code-bg:#121a22; --code-hl:#3a3216;
+  --t0:#6b9bff; --t1:#f0a43c; --t2:#3ccf98; --t3:#e07ae8; --t4:#9fb0c2; --t5:#ff7b6e;
+  --run:#3ccf98; --ready:#6aa8de; --blocked:#ff7b6e; --waiting:#f0b84a; --timed:#ff9a52; --new:#93a2b0; --term:#5f6e7c;
+  --hot:#3d3415; --hot-line:#e0b300; --bad:#3e1f1f; --bad-line:#ff7b6e; --ok:#15352a; --ok-line:#3ccf98; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0f151b; --panel:#161e26; --ink:#e3eaf0; --muted:#93a2b0; --line:#2a3642; --soft:#1b2530;
+  --accent:#5cb3ef; --accent-soft:#16334a; --code-bg:#121a22; --code-hl:#3a3216;
+  --t0:#6b9bff; --t1:#f0a43c; --t2:#3ccf98; --t3:#e07ae8; --t4:#9fb0c2; --t5:#ff7b6e;
+  --run:#3ccf98; --ready:#6aa8de; --blocked:#ff7b6e; --waiting:#f0b84a; --timed:#ff9a52; --new:#93a2b0; --term:#5f6e7c;
+  --hot:#3d3415; --hot-line:#e0b300; --bad:#3e1f1f; --bad-line:#ff7b6e; --ok:#15352a; --ok-line:#3ccf98; color-scheme:dark }
