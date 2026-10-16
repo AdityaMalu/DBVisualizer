@@ -26,13 +26,74 @@ test('every step of every topic renders', async ({ page }) => {
   expect(bad).toEqual([]);
 });
 
-test('every topic has theory and a quiz', async ({ page }) => {
+test('every topic has theory, examples, interview tips, exercises and a quiz', async ({ page }) => {
   const res = await page.evaluate(() => T.map((t, i) => {
     go(i, 0);
-    return { no: t.no, theory: !document.getElementById('theoryCard').hidden && !!document.getElementById('theory').textContent.trim(),
+    const shown = id => !document.getElementById(id).hidden;
+    return { no: t.no,
+      theory: shown('theoryCard') && !!document.getElementById('theory').textContent.trim(),
+      examples: shown('exCard') ? document.querySelectorAll('#examples .ex').length : 0,
+      tips: shown('tipCard') && !!document.querySelector('#tips .tip-say'),
+      exercises: shown('xrCard') ? document.querySelectorAll('#exercises .xr').length : 0,
       questions: document.querySelectorAll('#quiz .qz').length };
-  }).filter(r => !r.theory || r.questions !== 3));
+  }).filter(r => !r.theory || r.examples < 3 || !r.tips || r.exercises < 3 || r.questions !== 3));
   expect(res).toEqual([]);
+});
+
+test('an example runs in the in-browser SQLite and shows a result table', async ({ page }) => {
+  await page.goto('index.html#t1-3');
+  await page.reload();
+  await page.locator('#examples .ex').first().locator('[data-run]').click();
+  const table = page.locator('#examples .ex').first().locator('.res-box table');
+  await expect(table).toBeVisible({ timeout: 20000 });
+  await expect(table.locator('tbody tr')).toHaveCount(10);        // 10 orders, each with its customer
+});
+
+test('an edited example runs the edited SQL', async ({ page }) => {
+  await page.goto('index.html#t1-1');
+  await page.reload();
+  const ex = page.locator('#examples .ex').first();
+  await ex.locator('[data-edit]').click();
+  await ex.locator('textarea').fill('SELECT 41 + 1 AS answer;');
+  await ex.locator('[data-run]').click();
+  await expect(ex.locator('.res-box td')).toHaveText('42', { timeout: 20000 });
+});
+
+test('exercises are auto-checked: right answer passes, wrong answer explains why', async ({ page }) => {
+  await page.goto('index.html#t1-1');
+  await page.reload();
+  const xr = page.locator('#exercises .xr').first();
+  await xr.locator('textarea').fill("SELECT name FROM customers");
+  await xr.locator('[data-check]').click();
+  await expect(xr.locator('.xr-status')).toHaveClass(/bad/, { timeout: 20000 });
+  await expect(xr.locator('.xr-status')).toContainText('column');
+  await xr.locator('textarea').fill("SELECT name, joined FROM customers WHERE joined LIKE '2023%' ORDER BY joined");
+  await xr.locator('[data-check]').click();
+  await expect(xr.locator('.xr-status')).toHaveClass(/ok/, { timeout: 20000 });
+  await expect(xr.locator('[data-done]')).toBeChecked();
+  await expect(page.locator('#xrScore')).toHaveText(/^1 \/ \d+ done$/);
+  await page.reload();                                           // progress is remembered
+  await expect(page.locator('#exercises .xr').first().locator('[data-done]')).toBeChecked();
+});
+
+test('a SQL error is shown, not thrown', async ({ page }) => {
+  await page.goto('index.html#t1-1');
+  await page.reload();
+  const xr = page.locator('#exercises .xr').first();
+  await xr.locator('textarea').fill('SELEC nonsense');
+  await xr.locator('[data-xrun]').click();
+  await expect(xr.locator('.res-err')).toBeVisible({ timeout: 20000 });
+});
+
+test('hints, solutions and follow-up answers are hidden until asked for', async ({ page }) => {
+  const xr = page.locator('#exercises .xr').first();
+  await expect(xr.locator('.xr-sol')).toBeHidden();
+  await xr.locator('[data-sol]').click();
+  await expect(xr.locator('.xr-sol')).toBeVisible();
+  const qa = page.locator('#tips .tip-qa details').first();
+  await expect(qa).not.toHaveAttribute('open', '');
+  await qa.locator('summary').click();
+  await expect(qa).toHaveAttribute('open', '');
 });
 
 test('step controls and keyboard navigation', async ({ page }) => {
@@ -47,14 +108,14 @@ test('step controls and keyboard navigation', async ({ page }) => {
 });
 
 test('deep link opens the topic named in the hash', async ({ page }) => {
-  await page.goto('index.html#t4-6');
+  await page.goto('index.html#t6-2');
   await page.reload();                       // a hash-only change doesn't reload the page
-  await expect(page.locator('#no')).toHaveText('4.6');
+  await expect(page.locator('#no')).toHaveText('6.2');
 });
 
 test('quiz draws different questions on each try, with correct answers', async ({ page }) => {
   const r = await page.evaluate(() => {
-    const i = T.findIndex(t => t.no === '4.6'); go(i, 0);
+    const i = T.findIndex(t => t.no === '6.2'); go(i, 0);
     const t = T[i], bank = [...t.quiz, ...t.quizAdv];
     let overlap = 0, wrong = 0, prev = null;
     for (let k = 0; k < 20; k++) {
