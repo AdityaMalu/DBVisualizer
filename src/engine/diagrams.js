@@ -8,6 +8,7 @@ function graphSVG(t, d){
   let out = `<svg viewBox="${t.vb||'0 0 440 250'}" role="img" aria-label="${esc(t.title)} diagram"><defs>`;
   ['m','b','o','h'].forEach((k,i)=> out += `<marker id="gm${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="${['var(--muted)','var(--bad-line)','var(--ok-line)','var(--accent)'][i]}"/></marker>`);
   out += `</defs>`;
+  if (t.ring) out += `<circle cx="${t.ring.cx}" cy="${t.ring.cy}" r="${t.ring.r}" fill="none" stroke="var(--line)" stroke-width="2" stroke-dasharray="4 5"/>`;   // optional backdrop circle (hash rings)
   const box = id => { const n = N[id]; return {w:(n.w||120)/2, h:(n.h||40)/2}; };
   all.forEach(([a,b,l,f])=>{
     if (!vis(a) || !vis(b)) return;

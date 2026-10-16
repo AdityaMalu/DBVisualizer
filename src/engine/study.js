@@ -31,7 +31,7 @@ function renderStudy(){
     return `<article class="ex" data-i="${i}"><div class="ex-h"><span class="lvl lvl-${x.lv}">${EX_LV[x.lv]}</span><b>${x.title}</b></div>
       <pre class="sql" data-src>${hiBlock(x.sql)}</pre>
       <div class="ex-why">${x.why}</div>
-      ${db ? `<div class="runbar"><button type="button" class="primary" data-run>▶ Run</button><button type="button" data-edit>✎ Edit</button><span class="cm">SQLite in your browser · dataset <code>${esc(db)}</code></span></div><div class="res-box" data-out></div>` : ''}
+      ${db ? `<div class="runbar"><button type="button" class="primary" data-run>▶ Run</button><button type="button" data-edit>✎ Edit</button><span class="cm">SQLite in your browser · dataset <code>${esc(db)}</code>${x.err ? ' · expect an error: that\'s the point' : ''}</span></div><div class="res-box" data-out></div>` : ''}
     </article>`;
   }).join('');
   // interview tips

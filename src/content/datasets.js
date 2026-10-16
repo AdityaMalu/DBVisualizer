@@ -162,3 +162,30 @@ INSERT INTO enrollments VALUES
  (4,'PH101','A'),(4,'MA101','B'),
  (5,'MA101','A'),(5,'CS201','B');
 `);
+
+dataset('flat', 'one denormalized spreadsheet of order lines (for normalization practice)', `
+CREATE TABLE order_sheet (
+  order_id       INTEGER,
+  order_date     TEXT,
+  customer_id    INTEGER,
+  customer_name  TEXT,
+  customer_city  TEXT,
+  product_id     INTEGER,
+  product_name   TEXT,
+  category       TEXT,
+  qty            INTEGER,
+  unit_price     REAL,
+  PRIMARY KEY (order_id, product_id)
+);
+INSERT INTO order_sheet VALUES
+ (101,'2024-01-05',1,'Asha','Pune',1,'Laptop','electronics',1,900),
+ (101,'2024-01-05',1,'Asha','Pune',3,'Headphones','electronics',2,110),
+ (102,'2024-01-09',2,'Ben','Mumbai',2,'Phone','electronics',1,600),
+ (102,'2024-01-09',2,'Ben','Mumbai',7,'Novel','books',3,15),
+ (103,'2024-02-02',1,'Asha','Pune',4,'Desk','furniture',1,250),
+ (103,'2024-02-02',1,'Asha','Pune',5,'Chair','furniture',2,150),
+ (104,'2024-02-15',3,'Chen','Pune',7,'Novel','books',2,15),
+ (104,'2024-02-15',3,'Chen','Pune',8,'Cookbook','books',1,30),
+ (106,'2024-03-01',2,'Ben','Mumbay',3,'Headphones','electronics',1,120),
+ (106,'2024-03-01',2,'Ben','Mumbai',6,'Lamp','furniture',2,40);
+`);

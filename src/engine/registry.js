@@ -16,7 +16,8 @@ function dataset(name, title, sql) { DATASETS[name] = { name, title, sql }; }
    study: {
      imp: 'must'|'good'|'extra',
      theory:    TH(...),
-     examples:  [ {lv:'basic'|'mid'|'adv', title, sql, why, db?, run?} ]   simple → complex; runnable when a dataset applies
+     examples:  [ {lv:'basic'|'mid'|'adv', title, sql, why, db?, run?, err?} ]   simple → complex; runnable when a dataset applies;
+                                                                         err: the example demonstrates an error
      tips:      { say, points:[…], traps:[…], qa:[[question, answer], …] }
      exercises: [ {lv:'E'|'M'|'H', q, hint, sql?, ordered?, answer?, db?} ]  sql = checked against the reader's query; answer = written solution
      quiz:      [ [question, [a, b, c, d], answerIndex, why, 'E'|'M'|'H'], … ]   at least 3
