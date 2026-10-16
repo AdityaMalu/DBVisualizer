@@ -52,10 +52,10 @@ keep:[`Replication ≠ backup (mistakes replicate instantly).`,`Logical (pg_dump
   examples: [
     {lv:'basic', title:'A logical "dump" of one table', sql:`SELECT 'INSERT INTO accounts VALUES (' || id || ', ''' || owner || ''', ''' || branch || ''', ' || balance || ', ' || version || ');' AS dump_line
 FROM accounts ORDER BY id;`, why:`What a logical backup is: statements that recreate the data. Portable and readable, but restoring billions of these is slow.`},
-    {lv:'mid', title:'Snapshot before a risky change, restore after a mistake', sql:`CREATE TABLE accounts_backup AS SELECT * FROM accounts;   -- poor man's backup
-DELETE FROM accounts;                                       -- oops, no WHERE
-INSERT INTO accounts SELECT * FROM accounts_backup;         -- restore
-SELECT COUNT(*) AS restored_rows FROM accounts;`, why:`A table copy before a risky manual change is a cheap safety net (and a good habit), though not a substitute for real backups.`},
+    {lv:'mid', title:'Snapshot before a risky change, restore after a mistake', sql:`CREATE TABLE transfers_backup AS SELECT * FROM transfers;  -- poor man's backup
+DELETE FROM transfers;                                       -- oops, no WHERE
+INSERT INTO transfers SELECT * FROM transfers_backup;        -- restore
+SELECT COUNT(*) AS restored_rows FROM transfers;`, why:`A table copy before a risky manual change is a cheap safety net (and a good habit), though not a substitute for real backups.`},
     {lv:'adv', title:'Point-in-time reconstruction from a change log', sql:`CREATE TABLE changes (ts TEXT, account INTEGER, delta REAL);
 INSERT INTO changes VALUES ('2024-03-06 09:00', 1, -20), ('2024-03-06 12:00', 1, 50),
                            ('2024-03-06 14:32', 1, -9999);              -- the bad change
