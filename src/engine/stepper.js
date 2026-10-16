@@ -69,7 +69,7 @@ function render(){
   }
 
   $('lgTitle').textContent = t.logTitle || 'Output / events';
-  $('lgCard').hidden = !s.log.length && !!t.noLog;
+  $('lgCard').hidden = !s.log.length;
   $('log').innerHTML = s.log.length ? s.log.map((l,i)=>`<div class="${i>=s.log.length-s.nNew?'new':''}">${esc(l)}</div>`).join('') : '<div class="empty">no output yet</div>';
   $('log').scrollTop = 1e6;
 
