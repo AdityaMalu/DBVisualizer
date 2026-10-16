@@ -16,7 +16,7 @@ function pillOf(st){
   if (STATE[st]) return {label:STATE[st], cls:st};
   if (st.includes('→') && /RUN|BLOCKED|WAITING/.test(st)) { const cls = st.split('→').pop().trim(); return {label:st.replace(/RUN\b/g,'RUNNING'), cls}; }
   const i = st.lastIndexOf(':');
-  if (i > 0) return {label:st.slice(0,i), cls:st.slice(i+1)};
+  if (i > 0) { const l = st.slice(0,i); return {label:STATE[l]||l, cls:st.slice(i+1)}; }
   return {label:st, cls:'info'};
 }
 function render(){

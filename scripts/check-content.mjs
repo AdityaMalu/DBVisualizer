@@ -88,7 +88,14 @@ for (const p of PARTS) {
       else if (i && EX_LEVELS.indexOf(x.lv) < EX_LEVELS.indexOf(ex[i - 1].lv)) fail(at, `${w} is easier than the one before it; order simple → complex`);
       for (const k of ['title', 'sql', 'why']) if (typeof x[k] !== 'string' || !x[k].trim()) fail(at, `${w} has no "${k}"`);
       const db = x.run === false ? null : (x.db !== undefined ? x.db : t.db);
-      if (db && typeof x.sql === 'string') trySQL(at, w, db, x.sql);
+      if (db && typeof x.sql === 'string') {
+        if (x.err) {                                   // the point of the example is the error it raises
+          const d = new SQL.Database();
+          let threw = false;
+          try { d.exec('PRAGMA foreign_keys = ON;'); d.exec(DATASETS[db].sql); d.exec(x.sql); } catch (e) { threw = true; } finally { d.close(); }
+          if (!threw) fail(at, `${w} is marked err:true but runs without an error`);
+        } else trySQL(at, w, db, x.sql);
+      }
     });
     if (ex.length && !ex.some(x => x.lv === 'basic')) fail(at, 'examples need at least one basic one');
     if (ex.length && !ex.some(x => x.lv !== 'basic')) fail(at, 'examples need at least one intermediate or advanced one');
