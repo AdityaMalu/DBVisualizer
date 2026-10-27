@@ -54,6 +54,9 @@ export function build() {
     .replace('<!-- @scripts -->', () => scripts.join('\n'));
   mkdirSync(dirname(OUT), { recursive: true });
   writeFileSync(OUT, html);
+  // files in public/ (e.g. the Search Console verification file) are served from the site root
+  const PUB = join(ROOT, 'public');
+  if (existsSync(PUB)) for (const f of readdirSync(PUB)) copyFileSync(join(PUB, f), join(ROOT, 'dist', f));
   if (!existsSync(SQLJS)) throw new Error('node_modules/sql.js is missing: run "npm ci" first');
   mkdirSync(join(ROOT, 'dist', 'vendor'), { recursive: true });
   copyFileSync(SQLJS, join(ROOT, 'dist', 'vendor', 'sql-wasm-inline.js'));
